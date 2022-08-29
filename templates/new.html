@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="theme-color" content="#000000">
+        <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous">
+        <link href="{{ url_for('static',filename='css/custom.css') }}" rel="stylesheet" type="text/css" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+        <title>BidFreshFood - New Account Registration</title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-sm box-shadow">
+              <a href="/" class="navbar-brand d-flex align-items-center">
+                  <strong>	<img src="/static/img/bidfreshfood.png" height="40px"> </strong>
+              </a>
+			  {% if session %}
+			  <ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a href="/logout/" class="nav-link">Logout</a></li>
+				<li class="nav-item"><a href="/list-item/" class="nav-link">List Item</a></li>
+				<li class="nav-item"><a href="/my-items/" class="nav-link">My Items</a></li>
+				<li class="nav-item"><a href="/my-won-bids/" class="nav-link">My Won Bids</a></li>
+			  {% else %}
+			  <ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a href="/new/" class="nav-link">Register</a></li>
+				<li class="nav-item"><a href="/login/" class="nav-link">Login</a></li>
+			  {% endif %}
+			  </ul>
+            </nav>
+        </header><br />
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+						<br><br>
+                        <h2>New Account Registration</h2>
+                        <br>
+                        <form action="/register/" class="form" method="post">
+                            <i>Username</i><br><input type="text" name="username" id="username" autofocus required > <span id="user-msg" class="alert alert-danger"></span><br /><br />
+                            <i>Password</i><br><input type="password" name="password" id="password" required > <span id="password-msg" class="alert alert-danger"></span><br /><br />
+                            <i>Confirm Password</i><br><input type="password" name="confirm" id="confirm"  required> <span id="confirm-msg" class="alert alert-danger"></span><br /><br />
+                            <i>First Name</i><br><input type="text" name="fname" id="fname" required> <span id="fname-msg" class="alert alert-danger"></span><br /><br />
+                            <i>Last Name</i><br><input type="text" name="lname" id="lname" required> <span id="lname-msg" class="alert alert-danger"></span><br /><br />
+                            <i>Email Address</i><br><input type="email" name="email" id="email" required> <span id="email-msg" class="alert alert-danger"></span><br /><br /><br />
+                            <button type="reset" class="btn btn-secondary">Clear</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="{{ url_for('static',filename='js/validate.js') }}"></script>
+    </body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+BidFreshFood - Cart
+{% endblock %}
+
+{% block body %}
+  <div aria-hidden="true" class="mainBids">
+    <div>
+      <div>
+        <div>
+          <h5 class="modal-title" id="exampleModalLongTitle">Active Bids</h5><br>
+        </div>
+        <div>
+          <div id="shoppingCart">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Highest Bid</th>
+                        <th scope="col">Your Bid</th>
+						<th scope="col">Status</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% if bidsLen != 0 %}
+                    {% for auction in auctions %}
+						{% if activeBids[auction["id"]] %}
+                      <tr>
+                        <td class="bidItem"><img src="{{auction["imageURL"]}}" width="30px" alt="{{auction["title"]}}" /><span class="listItem">{{auction["title"]}}</span></td>
+                        <td>€{{ auction["currentBidValue"] }}</td>
+						<td>€{{ activeBids[auction["id"]][0] }}</td>
+						{%if activeBids[auction["id"]][0] >= auction["currentBidValue"] %}
+							<td class="winning">Winning</td>
+						{% else %}
+							<td class="losing">Losing</td>
+						{% endif %}
+                        <td>
+                          <form action="/remove/" methods="GET">
+                            <input type="hidden" name="id" value="{{ activeBids[auction['id']][1] }}" />
+							<input type="hidden" name="rListingId" value="{{ auction['id'] }}" />
+                            <button type="submit" class="btn btn-secondary btn-sm" id="removeFromCart">Cancel Bid</button>
+                          </form>
+                        </td>
+                      </tr>
+					  {% endif %}
+                    </tbody>
+                    {% endfor %}
+					<tfoot>
+                      <tr>
+                        <td colSpan="7">Active Bids: {{ bidsLen }}, Total: {{ '€{:,.2f}'.format(bidsSum) }}<br /><br />
+                          <div class="modal-footer">
+                            <a href="/"><button type="button" class="btn btn-primary checkout">Continue Bidding</button></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% else %}
+                      <tr>
+                        <td colSpan="7"><h3>No Active Bids</h3></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="7">Bid for fresh food now!<br />
+                          <div class="modal-footer">
+                            <a href="/"><button type="button" class="btn btn-secondary" data-dismiss="modal">View All Bids</button></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% endif %}
+                  </table>
+				  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </main>
+
+{% endblock %}

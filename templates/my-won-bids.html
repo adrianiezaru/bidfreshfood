@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+BidFreshFood - My Won Bids
+{% endblock %}
+
+{% block body %}
+  <div aria-hidden="true" class="mainBids">
+    <div>
+      <div>
+        <div>
+          <h5 class="modal-title" id="exampleModalLongTitle">My Won Bids</h5><br>
+        </div>
+        <div>
+          <div id="shoppingCart">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Highest Bid</th>
+						<th scope="col">Status</th>
+						<th scope="col">Winner</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% if won_bids != 0 %}
+                    {% for auction in won_auctions %}
+                      <tr>
+                        <td class="bidItem"><img src="{{auction["imageURL"]}}" width="30px" alt="{{auction["title"]}}" /><span class="listItem">{{auction["title"]}}</span></td>
+                        <td>€{{ auction["currentBidValue"] }}</td>
+						{%if auction["isOpen"] > 0 %}
+							<td class="active">Active</td>
+							<td>Not Decided</td>
+							
+						{% else %}
+							<td class="closed">Closed</td>
+							<td class="active">{{ userlist[auction["winner_id"]] | join(" ") }}</td>
+						{% endif %}
+                     </tr>
+                    </tbody>
+                    {% endfor %}
+					</tbody>
+					<tfoot>
+                      <tr>
+                        <td colSpan="7">Won Bids: {{ won_bids }}, Total: {{ '€{:,.2f}'.format(user_bids_sum) }}<br /><br />
+                          <div class="modal-footer">
+                            <a href="/"><button type="button" class="btn btn-primary main-button">View All Bids</button></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% else %}
+                      <tr>
+                        <td colSpan="7"><h3>You have not won any Auction!</h3></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="7">Bid for a Fresh Food now!<br />
+                          <div class="modal-footer">
+                            <a href="/"><button type="button" class="btn btn-secondary" data-dismiss="modal">View All Bids</button></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% endif %}
+                  </table>
+				  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </main>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+BidFreshFood - Active Bids
+{% endblock %}
+
+{% block body %}
+  <div aria-hidden="true" class="mainBids">
+    <div>
+      <div>
+        <div>
+          <h5 class="modal-title" id="exampleModalLongTitle">My Items</h5><br>
+        </div>
+        <div>
+          <div id="shoppingCart">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Highest Bid</th>
+						<th scope="col">Status</th>
+						<th scope="col">Winner</th>
+                        <th scope="col">Close Auction</th>
+						<th scope="col">Remove Item</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% if mybidsLen != 0 %}
+                    {% for auction in auctions %}
+                      <tr>
+                        <td class="bidItem"><img src="{{auction["imageURL"]}}" width="30px" alt="{{auction["title"]}}" /><span class="listItem">{{auction["title"]}}</span></td>
+                        <td>€{{ auction["currentBidValue"] }}</td>
+						{%if auction["isOpen"] > 0 %}
+							<td class="active">Active</td>
+							<td>Not Decided</td>
+							<td>
+							  <form action="/close-auction/" methods="GET">
+								<input type="hidden" name="clistingId" value="{{ auction['id'] }}" />
+								<button type="submit" class="btn btn-secondary btn-sm">Close Auction</button>
+							  </form>
+							</td>
+							<td>Ongoing Auction</td>
+							
+						{% else %}
+							<td class="closed">Closed</td>
+							<td class="active">{{ userlist[auction["winner_id"]] | join(" ") }}</td>
+							<td>Already Closed</td>
+							<td>
+							  <form action="/delete-auction/" methods="GET">
+								<input type="hidden" name="clistingId" value="{{ auction['id'] }}" />
+								<button type="submit" class="btn btn-secondary btn-sm">Remove Item</button>
+							  </form>
+							</td>
+						{% endif %}
+                     </tr>
+                    </tbody>
+                    {% endfor %}
+					</tbody>
+					<tfoot>
+                      <tr>
+                        <td colSpan="7">All Items: {{ mybidsLen }}, Total: {{ '€{:,.2f}'.format(user_bids_sum) }}<br /><br />
+                          <div class="modal-footer">
+                            <a href="/"><button type="button" class="btn btn-primary main-button">View All Bids</button></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% else %}
+                      <tr>
+                        <td colSpan="7"><h3>You do not have any Item Listed!</h3></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="7">List a new Item now!<br />
+                          <div class="modal-footer">
+                            <a href="/"><button type="button" class="btn btn-secondary" data-dismiss="modal">View All Bids</button></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% endif %}
+                  </table>
+				  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </main>
+
+{% endblock %}

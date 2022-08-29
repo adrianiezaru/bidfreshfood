@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+Bids Home
+{% endblock %}
+
+{% block body %}
+      <div class="row mainBids" id="bidCard">
+      {% for auction in auctions %}
+          <div class="col-sm">
+			  
+              <div class="card text-center">
+                  <div class="card-body">
+					<span>{{ auction['description'] }}</span><br>
+					  <a href='/view-bid/?item_id={{ auction["id"] }}'>
+						<img src="{{auction["imageURL"]}}" class="bid" alt="{{ auction['description'] }}" />
+					  </a>
+                      <h5 class="card-title">{{auction["title"]}}</h5>
+                      {% if auction["isOpen"] == 1 %}
+						<h5 class="card-text price">{{ '{:,.2f}'.format(auction["currentBidValue"]) }}</h4>
+                      {% else %}
+                        <img src="/static/img/sale-icon.png" width="40px" />
+                        <h5 class="card-text price" style="color:red; display:inline">{{ '{:,.2f}'.format(auction["currentBidValue"]) }}</h4>
+                      {% endif %}
+					  {% if session and auction["isOpen"] == 1 %}
+					  
+                      <div class="stepper-input">
+						  
+                          <span class="decrement target noselect">-</span>
+                          <input class="quantity" name="quantity" min='{{ auction["currentBidValue"]+1 }}&#x20AC;' value='{{ auction["currentBidValue"]+1 }}&#x20AC;' />
+                          <span class="increment target noselect">+</span>
+                      </div>
+                      <input type="hidden" name="id" value="{{auction["id"]}}" />
+					  
+					  <form class="placeBidButton" action="/placebid/" methods="POST">
+							<input type="hidden" name="sendBid" value='{{ auction["currentBidValue"]+1 }}' />
+							<input type="hidden" name="listingId" value="{{auction["id"]}}" />
+                            <button type="submit" class="btn btn-primary addToCart" id="placeBid">&#x2794; Place Bid</button>
+					  </form>
+					  <form class="watchButton" action="/watch/" methods="POST">
+							<input type="hidden" name="listingId" value="{{auction["id"]}}" />
+							<div class="inner-addon left-addon">
+								<span class="watch-icon">&#9825;</span>
+								<input type="submit" class="btn btn-primary addToCart watch" value="Watch" />
+							</div>
+					  </form>
+					  {% else %}
+						{% if session  %}
+							<br><span> You missed this item!</span>
+						{% endif %}
+					  {% endif %}
+                  </div>
+              </div>
+          </div>
+      {% endfor %}
+      </div>
+    </div>
+  </main>
+
+{% endblock %}

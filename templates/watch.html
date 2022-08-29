@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}
+BidFreshFood - Watch List
+{% endblock %}
+
+{% block body %}
+  <div aria-hidden="true">
+    <div>
+      <div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Watching Bids</h5>
+        </div>
+        <div>
+          <div id="shoppingCart">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                   <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Highest Bid</th>
+						<th scope="col">Status</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% if watchListLen != 0 %}
+						{% for watch_item in watchList %}
+						   {% for auction in auctions %}
+						     {% if watch_item["listing_id"] == auction["id"] %}
+							  <tr>
+								<td class="bidItem"><img src="{{auction["imageURL"]}}" width="30px" alt="{{auction["title"]}}" /><span class="listItem">{{auction["title"]}}</span></td>
+								<td>€{{ auction["currentBidValue"] }}</td>
+								<td>
+								  <form action="/stopwatching/" methods="GET">
+									<input type="hidden" name="rListingId" value="{{ auction['id'] }}" />
+									<button type="submit" class="btn btn-secondary btn-sm" id="removeFromCart">Stop Watching</button>
+								  </form>
+								</td>
+							  </tr>
+							</tbody>
+							{% endif %}
+						  {% endfor %}
+						{% endfor %}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="7">
+                            <br><br><a href="/"><button type="button" class="btn btn-primary main-button">View All Bids</button></a>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% else %}
+                      <tr>
+                        <td colSpan="7"><h3>You are not watching any Bids</h3></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="7">Save Bids by Clicking on Watch Button!<br />
+                          <div class="modal-footer">
+                            <br><br><a href="/"><button type="button" class="btn btn-primary main-button">View All Bids</button></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% endif %}
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </main>
+
+{% endblock %}

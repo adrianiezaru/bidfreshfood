@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="theme-color" content="#000000">
+        <link rel="shortcut icon" href="/static/img/favicon.ico">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+        <link href="{{ url_for('static',filename='css/custom.css') }}" rel="stylesheet" type="text/css" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+        <title>BidFreshFood - Home</title>
+    </head>
+    <body>
+  <!-- Bids Modal -->
+  <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Active Bids</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="shoppingCart">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Highest Bid</th>
+                        <th scope="col">Your Bid</th>
+						<th scope="col">Status</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% if bidsLen != 0 %}
+                    {% for auction in auctions %}
+						{% if activeBids[auction["id"]] %}
+                      <tr>
+                        <td class="bidItem"><img src="{{auction["imageURL"]}}" width="30px" alt="{{auction["title"]}}" /><span class="listItem">{{auction["title"]}}</span></td>
+                        <td>€{{ auction["currentBidValue"] }}</td>
+						<td>€{{ activeBids[auction["id"]][0] }}</td>
+						{%if activeBids[auction["id"]][0] >= auction["currentBidValue"] %}
+							<td class="winning">Winning</td>
+						{% else %}
+							<td class="losing">Losing</td>
+						{% endif %}
+                        <td>
+                          <form action="/remove/" methods="GET">
+                            <input type="hidden" name="id" value="{{ activeBids[auction['id']][1] }}" />
+							<input type="hidden" name="rListingId" value="{{ auction['id'] }}" />
+                            <button type="submit" class="btn btn-secondary btn-sm" id="removeFromCart">Cancel Bid</button>
+                          </form>
+                        </td>
+                      </tr>
+					  {% endif %}
+                    </tbody>
+                    {% endfor %}
+                    {% else %}
+                      <tr>
+                        <td colSpan="7"><h3>No Active Bids</h3></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="7">Bid for fresh food now!<br />
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% endif %}
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Watch Modal -->
+  <div class="modal fade" id="modalWatchCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Watching Bids</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="shoppingCart">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Highest Bid</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% if watchListLen != 0 %}
+						{% for watch_item in watchList %}
+						   {% for auction in auctions %}
+						     {% if watch_item["listing_id"] == auction["id"] %}
+							  <tr>
+								<td class="bidItem"><img src="{{auction["imageURL"]}}" width="30px" alt="{{auction["title"]}}" /><span class="listItem">{{auction["title"]}}</span></td>
+								<td>€{{ auction["currentBidValue"] }}</td>
+								<td>
+								  <form action="/stopwatching/" methods="GET">
+									<input type="hidden" name="rListingId" value="{{ auction['id'] }}" />
+									<button type="submit" class="btn btn-secondary btn-sm" id="removeFromCart">Stop Watching</button>
+								  </form>
+								</td>
+							  </tr>
+							</tbody>
+							{% endif %}
+						  {% endfor %}
+						{% endfor %}
+                    {% else %}
+                      <tr>
+                        <td colSpan="7"><h3>You are not watching any Bids</h3></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="7">Save Bids by Clicking on Watch Button!<br />
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    {% endif %}
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <header>
+    <nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-sm box-shadow">
+      <a href="/" class="navbar-brand d-flex align-items-center">
+          <strong>	<img src="/static/img/bidfreshfood.png" height="40px"> </strong>
+      </a>
+      {% if session %}
+			  <ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a href="/logout/" class="nav-link">Logout</a></li>
+				<li class="nav-item"><a href="/list-item/" class="nav-link">List Item</a></li>
+				<li class="nav-item"><a href="/my-items/" class="nav-link">My Items</a></li>
+				<li class="nav-item"><a href="/my-won-bids/" class="nav-link">My Won Bids</a></li>
+	  {% else %}
+			  <ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a href="/new/" class="nav-link">Register</a></li>
+				<li class="nav-item"><a href="/login/" class="nav-link">Login</a></li>
+	  {% endif %}
+	   </ul>
+	  {% if session %}
+      <div>
+        <button class="navbar-toggler" style="display:inline" type="button" data-toggle="modal" data-target="#modalCenter">
+          <span class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="">
+            &#x2794;<span class="counter">Active Bids: {{ bidsLen }}, Total: &#x20AC;{{ '{:,.2f}'.format(bidsSum) }}</span>
+          </span>
+        </button>
+		<button class="navbar-toggler" style="display:inline" type="button" data-toggle="modal" data-target="#modalWatchCenter">
+          <span class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="">
+				&#9829;<span class="counter">Watch List: {{ watchListLen }}</span>
+          </span>
+        </button>
+      </div>
+	  {% endif %}
+    </nav>
+  </header><br />
+  <main>
+    <div class="container">
+    {% block body %}{% endblock %}
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md">
+                    <hr />
+                    <p>&#169; <a href="/">A.G. Iezaru</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+        <!-- Custom JS Scripts -->
+        <script src="{{ url_for('static',filename='js/myscripts.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/validate.js') }}"></script>
+    </body>
+</html>

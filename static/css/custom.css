@@ -1,0 +1,212 @@
+.card:hover {
+    border-color: #999;
+    box-shadow: 1px 2px #999;
+}
+
+.card {
+    margin-bottom: 1em;
+}
+
+.price {
+    color: seagreen;
+    font-weight: bold;    
+}
+.hBack {
+	padding-bottom: 20px;
+	margins-bottom:20px;
+}
+.hidesold{
+	visibility:hidden;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.comment-area{
+  width: 100%;
+  height: 70px;
+  resize:vertical;
+
+}
+
+.mainBids{
+	padding-top: 40px;
+}
+.listItem{
+	padding-left:5px;
+}
+
+.inner-addon { 
+    position: relative; 
+}
+
+.send-icon {
+	padding-left: 5px!important;
+	font-size:20px!important;
+}
+
+.inner-addon .watch-icon {
+  position: absolute;
+  padding-left: 7px;
+  pointer-events: none;
+  color:white;
+  font-size:25px;
+}
+
+.main-send {
+	padding-top: 10px;
+}
+
+.left-addon .watch-icon  { left:  0px;}
+.right-addon .watch-icon { right: 0px;}
+
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+.left-addon .counter  { padding-left:  30px; }
+.right-addon .counter { padding-right: 30px; }
+
+.placeBidButton{
+	display: inline-block;
+}
+.watchButton{
+	display: inline-block;
+}
+
+.winning {
+	color: #008080;
+}
+
+.losing {
+	color: #FF6666;
+}
+
+.active {
+	color: #008080;
+}
+
+.closed {
+	color: #FF6666;
+}
+
+.bidItem {
+	float: left;
+}
+.comment {
+	padding-top: 10px;
+}
+
+.price:before {
+    content: 'Max Bid €';
+}
+
+
+.bid {
+    margin-bottom: 10px;
+    width: 200px;
+	height:133px;
+}
+
+.bid-big {
+    margin-bottom: 10px;
+    width: 400px;
+	height:266px;
+}
+.watch{
+	content: "\f3f7";
+}
+
+.stepper-input{
+    display: flex;
+    display: -webkit-flex;
+    color: #222;
+    max-width: 130px;
+    margin: 10px auto;
+    text-align: center;
+}
+
+header {
+    margin-bottom: 50px;
+}
+
+.bidCart {
+    width: 25px;
+}
+
+.add {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+}
+
+.main-button {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.add:hover {
+    background-color: deepskyblue;
+    border-color: deepskyblue;
+}
+
+tr {
+    text-align: center;
+}
+
+.modal-header {
+    border-bottom: 0px;
+}
+
+.counter {
+    font-size: 0.8em;
+	font-weight:normal;
+	margin:10px;
+}
+
+
+.increment,
+.decrement{
+        height: 28px;
+        width: 28px;
+        border: 1px solid #222;
+        text-align: center;
+        box-sizing: border-box;
+        border-radius: 50%;
+        text-decoration: none;
+        color: #222;
+        font-size: 24px;
+        line-height: 22px;
+        display: inline-block;
+        cursor: pointer;
+		margin: auto;
+}
+
+.decrement:hover, 
+.increment:hover {
+    color: green;  
+}
+
+.decrement:active, 
+.increment:active {    
+    background-color: green; 
+    color: white;  
+}
+
+
+.quantity{
+        height: 28px;
+        width: 48px;
+        text-align: center;
+        margin: 0 12px;
+        border-radius: 2px;
+        border: 1px solid #222;
+        
+}

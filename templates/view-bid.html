@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}
+BidFreshFood - Item Details
+{% endblock %}
+
+{% block body %}
+      <div class="row mainBids" id="bidCard">
+      {% for auction in items %}
+          <div class="col-sm">
+			  <a href="/" stlye="hBack"><button class="btn btn-primary" type="button">Go Back</button></a><hr>
+              <div class="card text-center">
+			      
+                  <div class="card-body">
+					<span>{{ auction['description'] }}</span><br>
+                      <img src="{{auction["imageURL"]}}" class="bid-big" alt="" />
+                      <h5 class="card-title">{{auction["title"]}}</h5>
+                      {% if auction["isOpen"] == 1 %}
+						<h5 class="card-text price">{{ '{:,.2f}'.format(auction["currentBidValue"]) }}</h4>
+                      {% else %}
+                        <img src="/static/img/sale-icon.png" width="40px" />
+                        <h5 class="card-text price" style="color:red; display:inline">{{ '{:,.2f}'.format(auction["currentBidValue"]) }}</h4>
+                      {% endif %}
+					  {% if session and auction["isOpen"] == 1 %}
+                      <div class="stepper-input">
+						  
+                          <span class="decrement target noselect">-</span>
+                          <input class="quantity" name="quantity" min='{{ auction["currentBidValue"]+1 }}&#x20AC;' value='{{ auction["currentBidValue"]+1 }}&#x20AC;' />
+                          <span class="increment target noselect">+</span>
+                      </div>
+                      <input type="hidden" name="id" value="{{auction["id"]}}" />
+					  
+					  <form class="placeBidButton" action="/placebid/" methods="POST">
+							<input type="hidden" name="sendBid" value='{{ auction["currentBidValue"]+1 }}' />
+							<input type="hidden" name="listingId" value="{{auction["id"]}}" />
+                            <button type="submit" class="btn btn-primary addToCart" id="placeBid">&#x2794; Place Bid</button>
+					  </form>
+					  <form class="watchButton" action="/watch/" methods="POST">
+							<input type="hidden" name="listingId" value="{{auction["id"]}}" />
+							<div class="inner-addon left-addon">
+								<span class="watch-icon">&#9825;</span>
+								<input type="submit" class="btn btn-primary addToCart watch" value="Watch" />
+							</div>
+					  </form>
+					  {% else %}
+						{% if session  %}
+							<br><span> You missed this item!</span>
+						{% endif %}
+					  {% endif %}
+                  </div>
+              </div>
+          </div>
+      {% endfor %}
+	  
+      </div>
+	  <br><h5 class="card-title">Comments</h5>
+	  {% if session %}
+	  <div class="row mainBids" style="padding-top:0; border:0; text-align:left" id="bidCard">
+			  <div class="col-sm">
+				  <div class="card">
+					  
+					  <div class="card-body">
+						<form class="comment-section " action="/add-comment/" methods="POST">
+							<input type="hidden" name="item_id" value="{{items[0]["id"]}}" />
+							<textarea type="text" name="message" class="comment-area form-control rounded-0" placeholder="Type a comment here..." id="message"></textarea>
+							<div class="inner-addon left-addon main-send">
+									<span class="watch-icon send-icon"><i class="bi-chat"></i></span>
+									<input type="submit" class="btn btn-primary addToCart" value="Post Comment" />
+								</div>
+						</form>
+					  </div>
+				  </div>
+			  </div>
+				  
+		  </div>
+	  {% endif %}
+	  {% if commentsLen > 0 %}
+		  {% for comment in comments %}
+		  <div class="row mainBids" style="padding-top:0; border:0; text-align:left" id="bidCard">
+			  <div class="col-sm">
+				  <div class="card">
+					  
+					  <div class="card-body">
+					    <i>{{ userlist[comment['user_id']] | join(" ") }}, {{ comment['datetime'] }}</i>
+						<p class="comment">{{ comment['content'] }}</p>
+
+					  </div>
+				  </div>
+			  </div>
+				  
+		  </div>
+		  {% endfor %}
+	  {% else %}
+		  <div class="row mainBids" style="padding-top:0; border:0; text-align:left" id="bidCard">
+			  <div class="col-sm">
+				  <div class="card">
+					  
+					  <div class="card-body">
+						<span>No Comments for this Item!</span><br>
+
+					  </div>
+				  </div>
+			  </div>
+				  
+		  </div>
+	  {% endif %}
+
+    </div>
+  </main>
+
+{% endblock %}
